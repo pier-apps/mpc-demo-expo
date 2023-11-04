@@ -6,22 +6,39 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "packagingOptions": {
+              "pickFirst": [
+                "lib/x86/libcrypto.so",
+                "lib/x86_64/libcrypto.so",
+                "lib/armeabi-v7a/libcrypto.so",
+                "lib/arm64-v8a/libcrypto.so"
+              ]
+            }
+          }
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.andras.pierwallet.MyMPCApp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.andras.pierwallet.MyMPCApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

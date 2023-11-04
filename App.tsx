@@ -1,20 +1,16 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import "react-native-url-polyfill/auto";
+
+import { PierMpcSdkReactNativeProvider } from "@pier-wallet/mpc-lib/dist/package/react-native";
+import Mpc from "./Mpc";
+import React from "react";
+import { PierServerVaultProvider } from "./pier-mpc-provider";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PierMpcSdkReactNativeProvider verbose={true}>
+      <PierServerVaultProvider>
+        <Mpc />
+      </PierServerVaultProvider>
+    </PierMpcSdkReactNativeProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
