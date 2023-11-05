@@ -1,8 +1,8 @@
 import "react-native-url-polyfill/auto";
 
 import { PierMpcSdkReactNativeProvider } from "@pier-wallet/mpc-lib/dist/package/react-native";
-import Mpc from "./Mpc";
 import React from "react";
+import Mpc from "./Mpc";
 import { PierServerVaultProvider } from "./pier-mpc-provider";
 
 export default function App() {

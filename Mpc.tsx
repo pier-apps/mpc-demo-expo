@@ -3,7 +3,6 @@ import { Button, View, Text } from "react-native";
 import { useEffect, useState } from "react";
 import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
 import { ethers } from "ethers";
-import _ from "lodash";
 import { usePierServerVault } from "./pier-mpc-provider";
 import { usePierMpcSdk } from "@pier-wallet/mpc-lib/dist/package/react-native";
 
@@ -23,11 +22,6 @@ export default function Mpc() {
     try {
       console.log("generating local key share...");
       const tempKeyShare = await pierMpcVaultSdk.generateKeyShare();
-
-      console.log(
-        "🚀 ~ file: Mpc.tsx:27 ~ generateKeyShare ~ tempKeyShare:",
-        tempKeyShare
-      );
 
       console.log("local key share generated.", tempKeyShare.publicKey);
       setKeyShare(tempKeyShare);

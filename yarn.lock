@@ -2032,10 +2032,10 @@
   resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.0.tgz#0cf016419d45ca9db6ad971d615185f6e4320513"
   integrity sha512-uo1NCMjdAc1xksXYjdO7JIkGdhdyPLzcpWbK94vwYgq8iIA/uXIiewi+IC+z3nELCXTR4vTsdt+dM6O/wSmXHw==
 
-"@pier-wallet/mpc-lib@^0.6.6":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.6.6.tgz#ad37dbf3cba9d1ae19d701be6bd3cf3719326556"
-  integrity sha512-NmuPBLebvwqgCYH+I26bZ7QJFi8nOSbrHWPBSvfbNZ6MGkEZ7/9GYlF+wKHucnwWmmbpNFp1jj3UycsP1580wQ==
+"@pier-wallet/mpc-lib@0.6.7-android.0":
+  version "0.6.7-android.0"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.6.7-android.0.tgz#208ce45e0aebf3dccbc93d0059e5f4ca4b1946b5"
+  integrity sha512-cgMjy4SZk+GhnaTpszgACrpn7zWNaW4yZ4Y3smrdcTfT3b70wK+LPHJyXVGVw9XpGmJejVu/fKOGbavgG0MU+Q==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
     "@pier-wallet/bitcore-lib" "11.0.0-alpha.8"
@@ -2047,6 +2047,7 @@
     ethers "^5.7.0"
     events "^3.3.0"
     lodash "^4.17.21"
+    lru_map "^0.4.1"
     react-native-get-random-values "^1.9.0"
     react-native-webview "13.2.2"
     superjson "^2.2.0"
@@ -2354,7 +2355,7 @@
   dependencies:
     "@supabase/node-fetch" "^2.6.14"
 
-"@supabase/supabase-js@^2.0.0", "@supabase/supabase-js@^2.38.4":
+"@supabase/supabase-js@^2.0.0":
   version "2.38.4"
   resolved "https://registry.yarnpkg.com/@supabase/supabase-js/-/supabase-js-2.38.4.tgz#ca075f7aa5ad0e33cb39b0254053087c56323e4f"
   integrity sha512-bYwxm/GosvRqOMIv6YP7qUTZWi/trgHtDWUEZDEmyRHW24d0JYIb1GOt6RaO2hsWlecn88DAJIpjoNbprocgRA==
@@ -2366,12 +2367,12 @@
     "@supabase/realtime-js" "^2.8.4"
     "@supabase/storage-js" "^2.5.4"
 
-"@trpc/client@^10.37.1", "@trpc/client@^10.43.0":
+"@trpc/client@^10.37.1":
   version "10.43.1"
   resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.43.1.tgz#f6ab465d84c6d1add7e698fec3e4a50a09a6277c"
   integrity sha512-pkPtbDS0ck/2WZo2cWaPV11NFMII2I/nzse1Ggs5Cr0YczsZk3Z0DM77Sfb9FTSjmccYfkEtumHqxfTj6fRbbg==
 
-"@trpc/server@^10.37.1", "@trpc/server@^10.43.0":
+"@trpc/server@^10.37.1":
   version "10.43.1"
   resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.43.1.tgz#5a263b6da5d4c5c66729d144872ff28190f1cd07"
   integrity sha512-rKOSCpJOb1MdTyJFqdf3QNNESDfPkbP+yBOZBM2x6iIOS4VlCfJqxsaSrb3uLPR6s8Ni7DhTu+cu/q1r0xOGcw==
@@ -5234,6 +5235,11 @@ lru-cache@^6.0.0:
   integrity sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==
   dependencies:
     yallist "^4.0.0"
+
+lru_map@^0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/lru_map/-/lru_map-0.4.1.tgz#f7b4046283c79fb7370c36f8fca6aee4324b0a98"
+  integrity sha512-I+lBvqMMFfqaV8CJCISjI3wbjmwVu/VyOoU7+qtu9d7ioW5klMgsTTiUOUp+DJvfTTzKXoPbyC6YfgkNcyPSOg==
 
 make-dir@^2.0.0, make-dir@^2.1.0:
   version "2.1.0"
