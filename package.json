@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.0.5",
-    "@pier-wallet/mpc-lib": "0.6.7-android.0",
+    "@pier-wallet/mpc-lib": "0.7.2",
     "ethers": "^5.7.2",
     "expo": "~49.0.15",
     "expo-build-properties": "~0.8.3",

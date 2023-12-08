@@ -2008,10 +2008,10 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@pier-wallet/bitcore-lib@11.0.0-alpha.8":
-  version "11.0.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/bitcore-lib/-/bitcore-lib-11.0.0-alpha.8.tgz#a6bd095dab703ba9aec1ef90bf77c36240f836b1"
-  integrity sha512-DtorriPyZ41qpMapeImrFxih2p6zqL5ubjQIImZWqXlN4g6so6qV2PV6en7HnsGXnv0gWh5/TQY4T3LdbMMnuA==
+"@pier-wallet/bitcore-lib@11.0.0-alpha.9":
+  version "11.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/bitcore-lib/-/bitcore-lib-11.0.0-alpha.9.tgz#566bcc8ba8a650f96dd76a937ff8b40bef1a9d5c"
+  integrity sha512-aXMlVBYc0zM0UrdUqsSfvukQHc+dMbkxK6ILj+Q1w884ySLkLSNqo7Nqhy5WiQvWYB/duwXhXmMsJt537IsYNA==
   dependencies:
     assert "^2.1.0"
     bech32 "=2.0.0"
@@ -2027,22 +2027,23 @@
     randombytes "^2.1.0"
     url "^0.11.3"
 
-"@pier-wallet/mpc-ecdsa-wasm@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.0.tgz#0cf016419d45ca9db6ad971d615185f6e4320513"
-  integrity sha512-uo1NCMjdAc1xksXYjdO7JIkGdhdyPLzcpWbK94vwYgq8iIA/uXIiewi+IC+z3nELCXTR4vTsdt+dM6O/wSmXHw==
+"@pier-wallet/mpc-ecdsa-wasm@0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.2.tgz#98a37d213221c61bb4750ea27683fed8f0fc956b"
+  integrity sha512-kjcBMfjpJvWx2uzh9LdVlxFTj4NMAA8dgdIz1DrxrkudJt+Yx2Ish+4+MpLg0Hc300cvpTROdpQVy9bS5j2Y1g==
 
-"@pier-wallet/mpc-lib@0.6.7-android.0":
-  version "0.6.7-android.0"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.6.7-android.0.tgz#208ce45e0aebf3dccbc93d0059e5f4ca4b1946b5"
-  integrity sha512-cgMjy4SZk+GhnaTpszgACrpn7zWNaW4yZ4Y3smrdcTfT3b70wK+LPHJyXVGVw9XpGmJejVu/fKOGbavgG0MU+Q==
+"@pier-wallet/mpc-lib@0.7.2":
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.7.2.tgz#3c02be5900473c99a125b062d680a0f1c9522789"
+  integrity sha512-CU6GmWZJc85JiOerlHhiElth6ZN3UxrV59hBrzHpYV49U2voDzrxzcKI9AUYvB1plSGyOu0dIJaA/BPa5FEqdw==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
-    "@pier-wallet/bitcore-lib" "11.0.0-alpha.8"
-    "@pier-wallet/mpc-ecdsa-wasm" "0.2.0"
+    "@pier-wallet/bitcore-lib" "11.0.0-alpha.9"
+    "@pier-wallet/mpc-ecdsa-wasm" "0.2.2"
     "@supabase/supabase-js" "^2.0.0"
     "@trpc/client" "^10.37.1"
     "@trpc/server" "^10.37.1"
+    buffer "^6.0.3"
     elliptic "^6.5.4"
     ethers "^5.7.0"
     events "^3.3.0"
@@ -2395,11 +2396,6 @@
   integrity sha512-1nESsePMBlf0RPRffLZi5ujYh7IH1BWL4y9pr+Bn3cJBdxz+RTP8bUFljLz9HvzhhOSWKdyBZ4DIivdL6rvgZg==
   dependencies:
     "@types/istanbul-lib-report" "*"
-
-"@types/lodash@^4.14.200":
-  version "4.14.200"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.200.tgz#435b6035c7eba9cdf1e039af8212c9e9281e7149"
-  integrity sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==
 
 "@types/node@*":
   version "20.8.10"
