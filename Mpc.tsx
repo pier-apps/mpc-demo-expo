@@ -2,6 +2,11 @@ import { KeyShare, SessionKind } from "@pier-wallet/mpc-lib";
 import { Button, View, Text, SafeAreaView } from "react-native";
 import { useEffect, useState } from "react";
 import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
+import {
+  PierMpcBitcoinWallet,
+  PierMpcBitcoinWalletNetwork,
+} from "@pier-wallet/mpc-lib/dist/package/bitcoin";
+
 import { ethers } from "ethers";
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 
@@ -42,7 +47,7 @@ export default function Mpc() {
   const [ethWallet, setEthWallet] = useState<PierMpcEthereumWallet | null>(
     null,
   );
-  // const [btcWallet, setBtcWallet] = useState<PierMpcBitcoinWallet | null>(null);
+  const [btcWallet, setBtcWallet] = useState<PierMpcBitcoinWallet | null>(null);
 
   useEffect(() => {
     if (!keyShare) return;
@@ -60,13 +65,13 @@ export default function Mpc() {
       );
       setEthWallet(ethWallet);
 
-      // const btcWallet = new PierMpcBitcoinWallet(
-      //   keyShare,
-      //   PierMpcBitcoinWalletNetwork.Testnet,
-      //   signConnection,
-      //   pierMpc
-      // );
-      // setBtcWallet(btcWallet);
+      const btcWallet = new PierMpcBitcoinWallet(
+        keyShare,
+        PierMpcBitcoinWalletNetwork.Testnet,
+        signConnection,
+        pierMpc,
+      );
+      setBtcWallet(btcWallet);
     })();
   }, [keyShare, pierMpc]);
 
@@ -92,31 +97,31 @@ export default function Mpc() {
       setIsLoading(false);
     }
   };
-  // const sendBitcoinTransaction = async () => {
-  //   if (!btcWallet) return;
+  const sendBitcoinTransaction = async () => {
+    if (!btcWallet) return;
 
-  //   setIsLoading(true);
-  //   try {
-  //     const receiver = 'tb1qw2c3lxufxqe2x9s4rdzh65tpf4d7fssjgh8nv6'; // testnet faucet
-  //     const amountToSend = 800n; // 0.00000800 BTC = 800 satoshi
-  //     const feePerByte = 1n; // use a fee provider to get a more accurate fee estimate - otherwise check minimum fee manually
+    setIsLoading(true);
+    try {
+      const receiver = "tb1qw2c3lxufxqe2x9s4rdzh65tpf4d7fssjgh8nv6"; // testnet faucet
+      const amountToSend = 800n; // 0.00000800 BTC = 800 satoshi
+      const feePerByte = 1n; // use a fee provider to get a more accurate fee estimate - otherwise check minimum fee manually
 
-  //     // create a transaction request
-  //     const txRequest = await btcWallet.populateTransaction({
-  //       to: receiver,
-  //       value: amountToSend,
-  //       feePerByte,
-  //     });
+      // create a transaction request
+      const txRequest = await btcWallet.populateTransaction({
+        to: receiver,
+        value: amountToSend,
+        feePerByte,
+      });
 
-  //     // sign the transaction locally & send it to the network once we have the full signature
-  //     const tx = await btcWallet.sendTransaction(txRequest);
-  //     console.log('tx', tx.hash);
-  //   } catch (e) {
-  //     console.error(e);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+      // sign the transaction locally & send it to the network once we have the full signature
+      const tx = await btcWallet.sendTransaction(txRequest);
+      console.log("tx", tx.hash);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -127,11 +132,17 @@ export default function Mpc() {
           onPress={generateKeyShare}
           disabled={isLoading}
         />
-        <Text selectable>Address: {ethWallet?.address}</Text>
-        <Text>PublicKey: {keyShare?.publicKey.join(",")}</Text>
+        <Text selectable>ETH Address: {ethWallet?.address}</Text>
+        <Text selectable>BTC Address: {btcWallet?.address}</Text>
+
         <Button
           title="Send Ethereum yay"
           onPress={sendEthereumTransaction}
+          disabled={isLoading}
+        />
+        <Button
+          title="Send Bitcoin"
+          onPress={sendBitcoinTransaction}
           disabled={isLoading}
         />
       </View>
