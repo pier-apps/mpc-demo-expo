@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.0.5",
-    "@pier-wallet/mpc-lib": "0.7.2",
+    "@pier-wallet/mpc-lib": "^0.8.2",
     "ethers": "^5.7.2",
     "expo": "~49.0.15",
     "expo-build-properties": "~0.8.3",
@@ -18,9 +18,9 @@
     "expo-status-bar": "~1.6.0",
     "react": "18.2.0",
     "react-native": "0.72.6",
+    "react-native-mmkv": "^2.11.0",
     "react-native-quick-base64": "^2.0.7",
     "react-native-quick-crypto": "^0.6.1",
-    "react-native-url-polyfill": "^2.0.0",
     "react-native-webview": "^13.2.2",
     "stream-browserify": "^3.0.0"
   },

@@ -2008,41 +2008,23 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
-"@pier-wallet/bitcore-lib@11.0.0-alpha.9":
-  version "11.0.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/bitcore-lib/-/bitcore-lib-11.0.0-alpha.9.tgz#566bcc8ba8a650f96dd76a937ff8b40bef1a9d5c"
-  integrity sha512-aXMlVBYc0zM0UrdUqsSfvukQHc+dMbkxK6ILj+Q1w884ySLkLSNqo7Nqhy5WiQvWYB/duwXhXmMsJt537IsYNA==
-  dependencies:
-    assert "^2.1.0"
-    bech32 "=2.0.0"
-    bip-schnorr "=0.6.4"
-    bn.js "=4.11.8"
-    bs58 "^4.0.1"
-    buffer "^6.0.3"
-    buffer-compare "=1.1.1"
-    elliptic "^6.5.3"
-    hash.js "^1.1.7"
-    inherits "=2.0.1"
-    lodash "^4.17.20"
-    randombytes "^2.1.0"
-    url "^0.11.3"
-
 "@pier-wallet/mpc-ecdsa-wasm@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.2.tgz#98a37d213221c61bb4750ea27683fed8f0fc956b"
   integrity sha512-kjcBMfjpJvWx2uzh9LdVlxFTj4NMAA8dgdIz1DrxrkudJt+Yx2Ish+4+MpLg0Hc300cvpTROdpQVy9bS5j2Y1g==
 
-"@pier-wallet/mpc-lib@0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.7.2.tgz#3c02be5900473c99a125b062d680a0f1c9522789"
-  integrity sha512-CU6GmWZJc85JiOerlHhiElth6ZN3UxrV59hBrzHpYV49U2voDzrxzcKI9AUYvB1plSGyOu0dIJaA/BPa5FEqdw==
+"@pier-wallet/mpc-lib@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.8.2.tgz#dce6c5aaa3ba0f0ecd1ce7fc30f804a59d2b5a84"
+  integrity sha512-CPESeOs+E2f/Jv/dt5WFxpFeO7W3seZ6xI1UN616LCXCupYW+5oPqhqxsiewuyZwe+vtqBCWobkVev67zVUIAw==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
-    "@pier-wallet/bitcore-lib" "11.0.0-alpha.9"
     "@pier-wallet/mpc-ecdsa-wasm" "0.2.2"
     "@supabase/supabase-js" "^2.0.0"
     "@trpc/client" "^10.37.1"
     "@trpc/server" "^10.37.1"
+    assert "^2.1.0"
+    bitcore-lib "^10.0.21"
     buffer "^6.0.3"
     elliptic "^6.5.4"
     ethers "^5.7.0"
@@ -2050,9 +2032,11 @@
     lodash "^4.17.21"
     lru_map "^0.4.1"
     react-native-get-random-values "^1.9.0"
+    react-native-url-polyfill "^2.0.0"
     react-native-webview "13.2.2"
     superjson "^2.2.0"
     ts-essentials "^9.3.2"
+    url "^0.11.3"
     zod "^3.22.4"
 
 "@react-native-community/cli-clean@11.3.7":
@@ -2872,6 +2856,20 @@ bip-schnorr@=0.6.4:
     randombytes "^2.1.0"
     safe-buffer "^5.2.1"
 
+bitcore-lib@^10.0.21:
+  version "10.0.21"
+  resolved "https://registry.yarnpkg.com/bitcore-lib/-/bitcore-lib-10.0.21.tgz#3afb32dca7e5843836d608958bac0a057d57b304"
+  integrity sha512-oYB1BrHjeRHqdrZ+j/cVm+M0XGxRDDjDiX4wP9QWQGAZkvS6DQGeNIndwS7m7BA18H76PJRhBM+DrSV2medpXg==
+  dependencies:
+    bech32 "=2.0.0"
+    bip-schnorr "=0.6.4"
+    bn.js "=4.11.8"
+    bs58 "^4.0.1"
+    buffer-compare "=1.1.1"
+    elliptic "^6.5.3"
+    inherits "=2.0.1"
+    lodash "^4.17.20"
+
 bl@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/bl/-/bl-4.1.0.tgz#451535264182bec2fbbc83a62ab98cf11d9f7b3a"
@@ -3140,7 +3138,7 @@ cacache@^15.3.0:
     tar "^6.0.2"
     unique-filename "^1.1.1"
 
-call-bind@^1.0.0, call-bind@^1.0.2, call-bind@^1.0.4:
+call-bind@^1.0.0, call-bind@^1.0.2, call-bind@^1.0.4, call-bind@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/call-bind/-/call-bind-1.0.5.tgz#6fa2b7845ce0ea49bf4d8b9ef64727a2c2e2e513"
   integrity sha512-C3nQxfFZxFRVoJoGKKI8y3MOEo129NQ+FgQ08iye+Mk4zNZZGdjfs06bVTr+DBSlA66Q2VEcMki/cUCP4SercQ==
@@ -3622,7 +3620,7 @@ define-lazy-prop@^2.0.0:
   resolved "https://registry.yarnpkg.com/define-lazy-prop/-/define-lazy-prop-2.0.0.tgz#3f7ae421129bcaaac9bc74905c98a0009ec9ee7f"
   integrity sha512-Ds09qNh8yw3khSjiJjiUInaGX9xlqZDY7JVryGxdxV7NPeuqQfplOpQ66yJFZut3jLa5zOwkXw1g9EI2uKh4Og==
 
-define-properties@^1.1.3, define-properties@^1.1.4:
+define-properties@^1.1.3, define-properties@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.2.1.tgz#10781cc616eb951a80a034bafcaa7377f6af2b6c"
   integrity sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==
@@ -4479,7 +4477,7 @@ hash-base@^3.0.0:
     readable-stream "^3.6.0"
     safe-buffer "^5.2.0"
 
-hash.js@1.1.7, hash.js@^1.0.0, hash.js@^1.0.3, hash.js@^1.1.7:
+hash.js@1.1.7, hash.js@^1.0.0, hash.js@^1.0.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/hash.js/-/hash.js-1.1.7.tgz#0babca538e8d4ee4a0f8988d68866537a003cf42"
   integrity sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==
@@ -5899,12 +5897,12 @@ object-keys@^1.1.1:
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
 object.assign@^4.1.4:
-  version "4.1.4"
-  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.4.tgz#9673c7c7c351ab8c4d0b516f4343ebf4dfb7799f"
-  integrity sha512-1mxKf0e58bvyjSCtKYY4sRe9itRk3PJpquJOjeIkz885CczcI4IvJJDLPS72oowuSh+pBxUFROpX+TU++hxhZQ==
+  version "4.1.5"
+  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.5.tgz#3a833f9ab7fdb80fc9e8d2300c803d216d8fdbb0"
+  integrity sha512-byy+U7gp+FVwmyzKPYhW2h5l3crpmGsxl7X2s8y43IgxvG4g3QZ6CffDtsNQy1WsmZpQbO+ybo0AlW7TY6DcBQ==
   dependencies:
-    call-bind "^1.0.2"
-    define-properties "^1.1.4"
+    call-bind "^1.0.5"
+    define-properties "^1.2.1"
     has-symbols "^1.0.3"
     object-keys "^1.1.1"
 
@@ -6413,6 +6411,11 @@ react-native-get-random-values@^1.9.0:
   integrity sha512-+29IR2oxzxNVeaRwCqGZ9ABadzMI8SLTBidrIDXPOkKnm5+kEmLt34QKM4JV+d2usPErvKyS85le0OmGTHnyWQ==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-mmkv@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-mmkv/-/react-native-mmkv-2.11.0.tgz#51b9985f6a5c09fe9c16d8c1861cc2901856ace1"
+  integrity sha512-28PdUHjZJmAw3q+8zJDAAdohnZMpDC7WgRUJxACOMkcmJeqS3u5cKS/lSq2bhf1CvaeIiHYHUWiyatUjMRCDQQ==
 
 react-native-quick-base64@^2.0.5, react-native-quick-base64@^2.0.7:
   version "2.0.7"
