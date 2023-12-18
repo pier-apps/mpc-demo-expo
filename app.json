@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "MyMPCApp",
-    "slug": "MyMPCApp",
+    "slug": "mympcapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -28,10 +28,15 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.andras.pierwallet.MyMPCApp"
+      "bundleIdentifier": "com.andras.pierwallet.MyMPCApp",
+      "infoPlist": {
+        "RCTAsyncStorageExcludeFromBackup": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -42,6 +47,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f8f00ba0-c6e8-4e57-be92-a340c519b1ac"
+      }
+    },
+    "owner": "nbk-labs-ag"
   }
 }

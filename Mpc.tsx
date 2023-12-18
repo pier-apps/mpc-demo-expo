@@ -9,6 +9,7 @@ import {
 
 import { ethers } from "ethers";
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
@@ -18,15 +19,31 @@ const ethereumProvider = new ethers.providers.JsonRpcProvider(
 export default function Mpc() {
   const pierMpc = usePierMpc();
 
+  const userId = "123";
+  const storage = useAsyncStorage(`pier-mpc-${userId}`);
+
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setKeyShare(null);
+
       await pierMpc.auth.signInWithPassword({
         email: "mpc-lib-test@example.com",
         password: "123456",
       });
+      // restore key share from secure storage
+      // restore key share from MMKV
+      const backupKeyShareStr = await storage.getItem();
+
+      if (!backupKeyShareStr) return;
+      try {
+        const backupKeyShare = new KeyShare(JSON.parse(backupKeyShareStr));
+        setKeyShare(backupKeyShare);
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [pierMpc]);
 
@@ -37,6 +54,13 @@ export default function Mpc() {
         await pierMpc.generateKeyShare2Of3();
 
       console.log("local key share generated.", mainKeyShare.publicKey);
+
+      // TODO: Store main keyshare in secure storage
+
+      // TODO: Store backup keyshare in MMKV
+      storage.setItem(JSON.stringify(backupKeyShare.raw()));
+
+      // TODO: Encrypt backup keyshare with key in secure storage (cloud keychain)
       // you should save backupKeyShare as well but we will focus only on the mainKeyShare in this tutorial
       setKeyShare(mainKeyShare);
     } catch (e) {

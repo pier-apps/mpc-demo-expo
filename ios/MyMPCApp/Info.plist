@@ -48,6 +48,8 @@
         </dict>
       </dict>
     </dict>
+    <key>RCTAsyncStorageExcludeFromBackup</key>
+    <false/>
     <key>UILaunchStoryboardName</key>
     <string>SplashScreen</string>
     <key>UIRequiredDeviceCapabilities</key>
