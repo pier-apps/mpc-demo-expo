@@ -1,6 +1,6 @@
 import { KeyShare, SessionKind } from "@pier-wallet/mpc-lib";
-import { Button, View, Text, SafeAreaView } from "react-native";
-import { useEffect, useState } from "react";
+import { Button, Text, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
 import {
   PierMpcBitcoinWallet,
@@ -9,18 +9,25 @@ import {
 
 import { ethers } from "ethers";
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
-import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { keyShareCloudStorage } from "./keyshare-cloudstorage";
+import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
   "https://rpc.sepolia.org",
 );
+const userId = "123";
+
+// Scenario 1: New user / create key shares & store backup in cloud
+
+// Scenario 2: Existing user / restore key shares from local secure storage
+// Scenario 3: Existing user / restore key shares from cloud storage
+
+// TODO: Secnario 1b: New user / create key shares & store backup with whatever way the user wants
+// TODO: Scenario 3b: Existing user / restore key shares from whatever way the user wants
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
-
-  const userId = "123";
-  const storage = useAsyncStorage(`pier-mpc-${userId}`);
 
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -33,17 +40,14 @@ export default function Mpc() {
         email: "mpc-lib-test@example.com",
         password: "123456",
       });
-      // restore key share from secure storage
-      // restore key share from MMKV
-      const backupKeyShareStr = await storage.getItem();
 
-      if (!backupKeyShareStr) return;
-      try {
-        const backupKeyShare = new KeyShare(JSON.parse(backupKeyShareStr));
-        setKeyShare(backupKeyShare);
-      } catch (e) {
-        console.error(e);
+      // restore main key share from secure local storage
+      const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
+
+      if (!mainKeyShare) {
+        return undefined;
       }
+      setKeyShare(mainKeyShare);
     })();
   }, [pierMpc]);
 
@@ -53,16 +57,30 @@ export default function Mpc() {
       const [mainKeyShare, backupKeyShare] =
         await pierMpc.generateKeyShare2Of3();
 
-      console.log("local key share generated.", mainKeyShare.publicKey);
+      console.log("local key share generated.");
 
-      // TODO: Store main keyshare in secure storage
+      // Store main keyshare in secure storage (on device)
+      await keyShareSecureLocalStorage.saveKeyShare(mainKeyShare, userId);
 
-      // TODO: Store backup keyshare in MMKV
-      storage.setItem(JSON.stringify(backupKeyShare.raw()));
+      // Store backup keyshare in cloud storage
+      await keyShareCloudStorage.saveKeyShare(backupKeyShare, userId);
 
-      // TODO: Encrypt backup keyshare with key in secure storage (cloud keychain)
-      // you should save backupKeyShare as well but we will focus only on the mainKeyShare in this tutorial
       setKeyShare(mainKeyShare);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const restoreWalletFromCloud = async () => {
+    try {
+      const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
+
+      if (!backupKeyShare) {
+        return undefined;
+      }
+      setKeyShare(backupKeyShare);
+
+      // TODO: Allow user to create new account & transfer everything to new account, both chains
     } catch (e) {
       console.error(e);
     }
@@ -149,28 +167,40 @@ export default function Mpc() {
 
   return (
     <>
-      <SafeAreaView />
-      <View style={{ flex: 1, padding: 20 }}>
-        <Button
-          title="Generate Key Share yay"
-          onPress={generateKeyShare}
-          disabled={isLoading}
-        />
-        <Text selectable>ETH Address: {ethWallet?.address}</Text>
-        <Text selectable>BTC Address: {btcWallet?.address}</Text>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        {!keyShare && (
+          <>
+            <Button
+              title="Generate Key Share"
+              onPress={generateKeyShare}
+              disabled={isLoading}
+            />
 
-        <Button
-          title="Send Ethereum yay"
-          onPress={sendEthereumTransaction}
-          disabled={isLoading}
-        />
-        <Button
-          title="Send Bitcoin"
-          onPress={sendBitcoinTransaction}
-          disabled={isLoading}
-        />
-      </View>
-      <SafeAreaView />
+            <Button
+              title="Restore Key Share from Cloud"
+              onPress={restoreWalletFromCloud}
+              disabled={isLoading}
+            />
+          </>
+        )}
+        {keyShare && (
+          <>
+            <Text selectable>ETH Address: {ethWallet?.address}</Text>
+            <Text selectable>BTC Address: {btcWallet?.address}</Text>
+
+            <Button
+              title="Send Ethereum"
+              onPress={sendEthereumTransaction}
+              disabled={isLoading}
+            />
+            <Button
+              title="Send Bitcoin"
+              onPress={sendBitcoinTransaction}
+              disabled={isLoading}
+            />
+          </>
+        )}
+      </ScrollView>
     </>
   );
 }

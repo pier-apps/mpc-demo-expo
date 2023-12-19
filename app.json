@@ -21,21 +21,23 @@
             }
           }
         }
-      ]
+      ],
+      ["react-native-cloud-storage"]
     ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.andras.pierwallet.MyMPCApp",
       "infoPlist": {
         "RCTAsyncStorageExcludeFromBackup": false
+      },
+      "config": {
+        "usesNonExemptEncryption": false
       }
     },
     "android": {
