@@ -3,10 +3,6 @@ import { CloudStorage, CloudStorageScope } from "react-native-cloud-storage";
 
 const cloudStorageScope = CloudStorageScope.AppData;
 
-// TODO: Refresh token on https://developers.google.com/oauthplayground/
-const token = "";
-CloudStorage.setGoogleDriveAccessToken(token);
-
 class KeyShareCloudStorage {
   async saveKeyShare(keyShare: KeyShare, userId: string) {
     await checkIsCloudAvailable();
