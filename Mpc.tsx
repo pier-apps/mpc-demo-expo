@@ -30,10 +30,12 @@ export default function Mpc() {
   const pierMpc = usePierMpc();
 
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
+  const [restored, setRestored] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true);
       setKeyShare(null);
 
       await pierMpc.auth.signInWithPassword({
@@ -45,9 +47,13 @@ export default function Mpc() {
       const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
 
       if (!mainKeyShare) {
+        // no main key share found, try to restore from cloud
+        await restoreWalletFromCloud();
+        setIsLoading(false);
         return undefined;
       }
       setKeyShare(mainKeyShare);
+      setIsLoading(false);
     })();
   }, [pierMpc]);
 
@@ -78,6 +84,7 @@ export default function Mpc() {
       if (!backupKeyShare) {
         return undefined;
       }
+      setRestored(true);
       setKeyShare(backupKeyShare);
 
       // TODO: Allow user to create new account & transfer everything to new account, both chains
@@ -99,6 +106,7 @@ export default function Mpc() {
         SessionKind.SIGN,
         keyShare.partiesParameters,
       );
+
       const ethWallet = new PierMpcEthereumWallet(
         keyShare,
         signConnection,
@@ -165,40 +173,42 @@ export default function Mpc() {
     }
   };
 
+  if (isLoading) return <Text>Loading...</Text>;
+
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {!keyShare && (
-          <>
-            <Button
-              title="Generate Key Share"
-              onPress={generateKeyShare}
-              disabled={isLoading}
-            />
-
-            <Button
-              title="Restore Key Share from Cloud"
-              onPress={restoreWalletFromCloud}
-              disabled={isLoading}
-            />
-          </>
+          <Button
+            title="Generate Key Share"
+            onPress={generateKeyShare}
+            disabled={isLoading}
+          />
         )}
-        {keyShare && (
-          <>
-            <Text selectable>ETH Address: {ethWallet?.address}</Text>
-            <Text selectable>BTC Address: {btcWallet?.address}</Text>
 
-            <Button
-              title="Send Ethereum"
-              onPress={sendEthereumTransaction}
-              disabled={isLoading}
-            />
-            <Button
-              title="Send Bitcoin"
-              onPress={sendBitcoinTransaction}
-              disabled={isLoading}
-            />
-          </>
+        {keyShare && restored && (
+          <Text selectable>
+            Key share restored from cloud storage. Please create a new account
+            and transfer your funds to the new account.
+          </Text>
+        )}
+
+        {ethWallet && <Text selectable>ETH Address: {ethWallet?.address}</Text>}
+        {btcWallet && <Text selectable>BTC Address: {btcWallet?.address}</Text>}
+
+        {ethWallet && !restored && (
+          <Button
+            title="Send Ethereum"
+            onPress={sendEthereumTransaction}
+            disabled={isLoading}
+          />
+        )}
+        {btcWallet && !restored && (
+          <Button
+            title="Send Bitcoin"
+            onPress={sendBitcoinTransaction}
+            disabled={isLoading}
+          />
         )}
       </ScrollView>
     </>
