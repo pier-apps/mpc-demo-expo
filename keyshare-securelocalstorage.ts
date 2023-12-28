@@ -1,4 +1,5 @@
 import { KeyShare } from "@pier-wallet/mpc-lib";
+import { ExpoKeyShareSecureStore } from "@pier-wallet/mpc-lib/dist/package/expo-key-share-secure-store";
 import * as SecureStore from "expo-secure-store";
 
 class KeyShareSecureLocalStorage {
@@ -30,4 +31,4 @@ class KeyShareSecureLocalStorage {
 
 const getKey = (userId: string) => `keyshare-${userId}`;
 
-export const keyShareSecureLocalStorage = new KeyShareSecureLocalStorage();
+export const keyShareSecureLocalStorage = new ExpoKeyShareSecureStore();

@@ -2013,13 +2013,14 @@
   resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.2.tgz#98a37d213221c61bb4750ea27683fed8f0fc956b"
   integrity sha512-kjcBMfjpJvWx2uzh9LdVlxFTj4NMAA8dgdIz1DrxrkudJt+Yx2Ish+4+MpLg0Hc300cvpTROdpQVy9bS5j2Y1g==
 
-"@pier-wallet/mpc-lib@^0.8.2":
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.8.2.tgz#dce6c5aaa3ba0f0ecd1ce7fc30f804a59d2b5a84"
-  integrity sha512-CPESeOs+E2f/Jv/dt5WFxpFeO7W3seZ6xI1UN616LCXCupYW+5oPqhqxsiewuyZwe+vtqBCWobkVev67zVUIAw==
+"@pier-wallet/mpc-lib@^0.8.3-stores.1":
+  version "0.8.3-stores.1"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.8.3-stores.1.tgz#06d0c46e891dbba598f46fde69db5ef6bd0e106a"
+  integrity sha512-FneMv1Zc7ZU5TNKF+Sv/fX/GjjyGgqafS2O2CERMWyEeVkWWnTlzyLxybkJquF/Se4FwnTKLpuenAcs8zxhz1A==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
     "@pier-wallet/mpc-ecdsa-wasm" "0.2.2"
+    "@react-native-google-signin/google-signin" "^11.0.0"
     "@supabase/supabase-js" "^2.0.0"
     "@trpc/client" "^10.37.1"
     "@trpc/server" "^10.37.1"
@@ -2029,8 +2030,10 @@
     elliptic "^6.5.4"
     ethers "^5.7.0"
     events "^3.3.0"
+    expo-secure-store "^12.5.0"
     lodash "^4.17.21"
     lru_map "^0.4.1"
+    react-native-cloud-storage "^1.1.0"
     react-native-get-random-values "^1.9.0"
     react-native-url-polyfill "^2.0.0"
     react-native-webview "13.2.2"
@@ -4026,6 +4029,11 @@ expo-modules-core@1.5.11:
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
+
+expo-secure-store@^12.5.0:
+  version "12.5.0"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-12.5.0.tgz#f52456e15315d64d1e9000384d4a837eea9dbb1f"
+  integrity sha512-Ow2ei+SB1w4zPLxmOg2PVPf2i45Eii0T9KUaER5iRLJAMcBWN4nyGCxzESOoN3OrvxVadP0hAn6RVE1G3gdD+Q==
 
 expo-secure-store@~12.3.1:
   version "12.3.1"

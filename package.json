@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@craftzdog/react-native-buffer": "^6.0.5",
-    "@pier-wallet/mpc-lib": "^0.8.2",
+    "@pier-wallet/mpc-lib": "^0.8.3-stores.1",
     "@react-native-google-signin/google-signin": "^11.0.0",
     "ethers": "^5.7.2",
     "expo": "~49.0.15",

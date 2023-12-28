@@ -1,6 +1,6 @@
 import { KeyShare } from "@pier-wallet/mpc-lib";
+import { ReactNativeKeyShareCloudStorage } from "@pier-wallet/mpc-lib/dist/package/react-native-key-share-cloud-storage";
 import { CloudStorage, CloudStorageScope } from "react-native-cloud-storage";
-import { useGoogleLogin } from "./useGoogleLogin";
 
 const CLOUD_STORAGE_SCOPE = CloudStorageScope.AppData;
 const CLOUD_STORAGE_DIRECTORY = "/pier-mpc-demo";
@@ -62,7 +62,7 @@ const checkIsCloudAvailable = async () => {
   const isAvailable = await CloudStorage.isCloudAvailable();
 
   if (!isAvailable) {
-    useGoogleLogin(); // TODO: This is a hack to trigger the login flow
+    // useGoogleLogin(); // TODO: This is a hack to trigger the login flow
     console.error("Cloud Storage is not available");
   }
 
@@ -72,4 +72,4 @@ const checkIsCloudAvailable = async () => {
 // TODO: Add "version", so we can handle recovery with new version of keyshare / new wallet
 const getFileName = (userId: string) => `/keyshare-${userId}.json`;
 
-export const keyShareCloudStorage = new KeyShareCloudStorage();
+export const keyShareCloudStorage = new ReactNativeKeyShareCloudStorage();

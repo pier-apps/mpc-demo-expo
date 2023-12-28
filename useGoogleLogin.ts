@@ -1,33 +1,15 @@
-import {
-  GoogleSignin,
-  statusCodes,
-} from "@react-native-google-signin/google-signin";
+import { statusCodes } from "@react-native-google-signin/google-signin";
 import { useState } from "react";
-import { CloudStorage } from "react-native-cloud-storage";
+import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 
 const GOOGLE_WEB_CLIENT_ID =
   "571078858320-6p05u91onche6so06f62hehkugtip6np.apps.googleusercontent.com";
-
-const SCOPES = [
-  "https://www.googleapis.com/auth/drive",
-  "https://www.googleapis.com/auth/drive.appdata",
-];
-
-GoogleSignin.configure({
-  webClientId: GOOGLE_WEB_CLIENT_ID,
-  scopes: SCOPES,
-  offlineAccess: true,
-  forceCodeForRefreshToken: true,
-});
 
 export const useGoogleLogin = () => {
   const [signedIn, setSignedIn] = useState(false);
   const signIn = async () => {
     try {
-      await GoogleSignin.hasPlayServices();
-      await GoogleSignin.signIn();
-      const tokens = await GoogleSignin.getTokens();
-      CloudStorage.setGoogleDriveAccessToken(tokens.accessToken);
+      await keyShareCloudStorage.signInWithGoogle(GOOGLE_WEB_CLIENT_ID);
       setSignedIn(true);
     } catch (error: any) {
       console.log("error", error);

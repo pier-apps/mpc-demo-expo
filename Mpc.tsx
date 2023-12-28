@@ -66,10 +66,10 @@ export default function Mpc() {
       console.log("local key share generated.");
 
       // Store main keyshare in secure storage (on device)
-      await keyShareSecureLocalStorage.saveKeyShare(mainKeyShare, userId);
+      await keyShareSecureLocalStorage.saveKeyShare(userId, mainKeyShare);
 
       // Store backup keyshare in cloud storage
-      await keyShareCloudStorage.saveKeyShare(backupKeyShare, userId);
+      await keyShareCloudStorage.saveKeyShare(userId, backupKeyShare);
 
       setKeyShare(mainKeyShare);
     } catch (e) {
