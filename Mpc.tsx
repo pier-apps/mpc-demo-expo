@@ -1,14 +1,14 @@
 import { KeyShare, SessionKind } from "@pier-wallet/mpc-lib";
-import { Button, Text, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
-import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
 import {
   PierMpcBitcoinWallet,
   PierMpcBitcoinWalletNetwork,
 } from "@pier-wallet/mpc-lib/dist/package/bitcoin";
+import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
+import React, { useEffect, useState } from "react";
+import { Button, ScrollView, Text } from "react-native";
 
-import { ethers } from "ethers";
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
+import { ethers } from "ethers";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
 
@@ -79,6 +79,7 @@ export default function Mpc() {
 
   const restoreWalletFromCloud = async () => {
     try {
+      console.log("restoring key share from cloud storage...");
       const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
 
       if (!backupKeyShare) {
@@ -99,7 +100,11 @@ export default function Mpc() {
   const [btcWallet, setBtcWallet] = useState<PierMpcBitcoinWallet | null>(null);
 
   useEffect(() => {
-    if (!keyShare) return;
+    if (!keyShare) {
+      setEthWallet(null);
+      setBtcWallet(null);
+      return;
+    }
 
     (async () => {
       const signConnection = await pierMpc.establishConnection(
@@ -178,6 +183,7 @@ export default function Mpc() {
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <Text>Restored: {restored.toString()}</Text>
         {!keyShare && (
           <Button
             title="Generate Key Share"
@@ -207,6 +213,24 @@ export default function Mpc() {
           <Button
             title="Send Bitcoin"
             onPress={sendBitcoinTransaction}
+            disabled={isLoading}
+          />
+        )}
+        {keyShare && (
+          <Button
+            title="Delete wallet"
+            onPress={async () => {
+              if (!keyShare) return;
+              await keyShareCloudStorage.deleteKeyShare(
+                userId,
+                keyShare.publicKey,
+              );
+              await keyShareSecureLocalStorage.deleteKeyShare(
+                userId,
+                keyShare.publicKey,
+              );
+              setKeyShare(null);
+            }}
             disabled={isLoading}
           />
         )}
