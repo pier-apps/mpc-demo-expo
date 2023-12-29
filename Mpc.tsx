@@ -59,11 +59,8 @@ export default function Mpc() {
 
   const generateKeyShare = async () => {
     try {
-      console.log("generating local key share...");
       const [mainKeyShare, backupKeyShare] =
         await pierMpc.generateKeyShare2Of3();
-
-      console.log("local key share generated.");
 
       // Store main keyshare in secure storage (on device)
       await keyShareSecureLocalStorage.saveKeyShare(userId, mainKeyShare);
