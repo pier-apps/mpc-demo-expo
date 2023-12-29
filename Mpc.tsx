@@ -11,6 +11,7 @@ import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { ethers } from "ethers";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
+import { useGoogleLogin } from "./useGoogleLogin";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
@@ -28,6 +29,7 @@ const userId = "123";
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
+  const signInWithGoogle = useGoogleLogin();
 
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
   const [restored, setRestored] = useState(false);
@@ -181,6 +183,10 @@ export default function Mpc() {
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <Text>Restored: {restored.toString()}</Text>
+        <Button
+          title="log in to google"
+          onPress={async () => await signInWithGoogle.signIn()}
+        />
         {!keyShare && (
           <Button
             title="Generate Key Share"
