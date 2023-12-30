@@ -182,7 +182,6 @@ export default function Mpc() {
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Text>Restored: {restored.toString()}</Text>
         <Button
           title="log in to google"
           onPress={async () => await signInWithGoogle.signIn()}
@@ -220,22 +219,47 @@ export default function Mpc() {
           />
         )}
         {keyShare && (
-          <Button
-            title="Delete wallet"
-            onPress={async () => {
-              if (!keyShare) return;
-              await keyShareCloudStorage.deleteKeyShare(
-                userId,
-                keyShare.publicKey,
-              );
-              await keyShareSecureLocalStorage.deleteKeyShare(
-                userId,
-                keyShare.publicKey,
-              );
-              setKeyShare(null);
-            }}
-            disabled={isLoading}
-          />
+          <>
+            <Button
+              title="Delete wallet from phone and cloud storage"
+              disabled={!keyShare || isLoading}
+              onPress={async () => {
+                if (!keyShare) return;
+                await keyShareCloudStorage
+                  .deleteKeyShare(userId, keyShare.publicKey)
+                  .catch((err) => {
+                    console.error(
+                      "Failed to delete key share from cloud storage",
+                      err,
+                    );
+                  });
+                await keyShareSecureLocalStorage
+                  .deleteKeyShare(userId, keyShare.publicKey)
+                  .catch((err) => {
+                    console.error(
+                      "Failed to delete key share from secure local storage",
+                      err,
+                    );
+                  });
+                setKeyShare(null);
+              }}
+            />
+            <Button
+              title="Delete wallet from phone storage"
+              disabled={!keyShare || isLoading}
+              onPress={async () => {
+                if (!keyShare) return;
+                await keyShareSecureLocalStorage
+                  .deleteKeyShare(userId, keyShare.publicKey)
+                  .catch((err) => {
+                    console.error(
+                      "Failed to delete key share from secure local storage",
+                      err,
+                    );
+                  });
+              }}
+            />
+          </>
         )}
       </ScrollView>
     </>

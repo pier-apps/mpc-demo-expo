@@ -2013,10 +2013,10 @@
   resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.2.tgz#98a37d213221c61bb4750ea27683fed8f0fc956b"
   integrity sha512-kjcBMfjpJvWx2uzh9LdVlxFTj4NMAA8dgdIz1DrxrkudJt+Yx2Ish+4+MpLg0Hc300cvpTROdpQVy9bS5j2Y1g==
 
-"@pier-wallet/mpc-lib@^0.8.3-stores.4":
-  version "0.8.3-stores.4"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.8.3-stores.4.tgz#e1218789d718404f0d1376434b5e77ff4a1a6894"
-  integrity sha512-epgnSUm4R3N+Er7Dl/Of0OqCYUY7FhsLy4E5EGASHg2fJ0HjKzLji+Tsax4jAht8b6raBXiaYM3lfOZ38UQGFg==
+"@pier-wallet/mpc-lib@^0.9.0-stores.0":
+  version "0.9.0-stores.0"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.9.0-stores.0.tgz#983080ef283f6c2d4b5d99da3cb8517964ff1656"
+  integrity sha512-vtvLlpnApHuJT7qMHGv9r8B5SvtFhJmlfjM4MFpEn3+YBIzttTc8jGWfLMh33h+9gIVkIHErhclTXWGSTUZ6vw==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
     "@pier-wallet/mpc-ecdsa-wasm" "0.2.2"
