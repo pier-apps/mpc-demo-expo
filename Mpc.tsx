@@ -78,16 +78,43 @@ export default function Mpc() {
 
   const restoreWalletFromCloud = async () => {
     try {
+      if (!signInWithGoogle.signedIn) {
+        console.log("not signed in to google");
+        return undefined;
+      }
+
       console.log("restoring key share from cloud storage...");
       const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
 
       if (!backupKeyShare) {
+        console.log("no key share found in cloud storage");
         return undefined;
       }
       setRestored(true);
       setKeyShare(backupKeyShare);
 
       // TODO: Allow user to create new account & transfer everything to new account, both chains
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const restoreWalletFromCloudOrGenerateKeyShare = async () => {
+    try {
+      if (!signInWithGoogle.signedIn) {
+        console.log("not signed in to google");
+        return undefined;
+      }
+
+      console.log("restoring key share from cloud storage...");
+      const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
+
+      if (!backupKeyShare) {
+        console.log("no key share found in cloud storage");
+        return generateKeyShare();
+      }
+      setRestored(true);
+      setKeyShare(backupKeyShare);
     } catch (e) {
       console.error(e);
     }
@@ -179,22 +206,29 @@ export default function Mpc() {
 
   if (isLoading) return <Text>Loading...</Text>;
 
+  if (!signInWithGoogle.signedIn) {
+    return (
+      <Button
+        title="log in to google"
+        onPress={async () => await signInWithGoogle.signIn()}
+      />
+    );
+  }
+
+  if (!keyShare) {
+    return (
+      <Button
+        title="Restore from Cloud Storage or Generate Key Share"
+        onPress={restoreWalletFromCloudOrGenerateKeyShare}
+        disabled={isLoading}
+      />
+    );
+  }
+
   return (
     <>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Button
-          title="log in to google"
-          onPress={async () => await signInWithGoogle.signIn()}
-        />
-        {!keyShare && (
-          <Button
-            title="Generate Key Share"
-            onPress={generateKeyShare}
-            disabled={isLoading}
-          />
-        )}
-
-        {keyShare && restored && (
+        {restored && (
           <Text selectable>
             Key share restored from cloud storage. Please create a new account
             and transfer your funds to the new account.
@@ -218,49 +252,45 @@ export default function Mpc() {
             disabled={isLoading}
           />
         )}
-        {keyShare && (
-          <>
-            <Button
-              title="Delete wallet from phone and cloud storage"
-              disabled={!keyShare || isLoading}
-              onPress={async () => {
-                if (!keyShare) return;
-                await keyShareCloudStorage
-                  .deleteKeyShare(userId, keyShare.publicKey)
-                  .catch((err) => {
-                    console.error(
-                      "Failed to delete key share from cloud storage",
-                      err,
-                    );
-                  });
-                await keyShareSecureLocalStorage
-                  .deleteKeyShare(userId, keyShare.publicKey)
-                  .catch((err) => {
-                    console.error(
-                      "Failed to delete key share from secure local storage",
-                      err,
-                    );
-                  });
-                setKeyShare(null);
-              }}
-            />
-            <Button
-              title="Delete wallet from phone storage"
-              disabled={!keyShare || isLoading}
-              onPress={async () => {
-                if (!keyShare) return;
-                await keyShareSecureLocalStorage
-                  .deleteKeyShare(userId, keyShare.publicKey)
-                  .catch((err) => {
-                    console.error(
-                      "Failed to delete key share from secure local storage",
-                      err,
-                    );
-                  });
-              }}
-            />
-          </>
-        )}
+        <Button
+          title="Delete wallet from phone and cloud storage"
+          disabled={!keyShare || isLoading}
+          onPress={async () => {
+            if (!keyShare) return;
+            await keyShareCloudStorage
+              .deleteKeyShare(userId, keyShare.publicKey)
+              .catch((err) => {
+                console.error(
+                  "Failed to delete key share from cloud storage",
+                  err,
+                );
+              });
+            await keyShareSecureLocalStorage
+              .deleteKeyShare(userId, keyShare.publicKey)
+              .catch((err) => {
+                console.error(
+                  "Failed to delete key share from secure local storage",
+                  err,
+                );
+              });
+            setKeyShare(null);
+          }}
+        />
+        <Button
+          title="Delete wallet from phone storage"
+          disabled={!keyShare || isLoading}
+          onPress={async () => {
+            if (!keyShare) return;
+            await keyShareSecureLocalStorage
+              .deleteKeyShare(userId, keyShare.publicKey)
+              .catch((err) => {
+                console.error(
+                  "Failed to delete key share from secure local storage",
+                  err,
+                );
+              });
+          }}
+        />
       </ScrollView>
     </>
   );
