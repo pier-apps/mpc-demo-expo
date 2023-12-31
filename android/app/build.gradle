@@ -84,6 +84,9 @@ android {
     namespace 'com.andras.pierwallet.MyMPCApp'
     defaultConfig {
         applicationId 'com.andras.pierwallet.MyMPCApp'
+        //Add this line
+        namespace("com.andras.pierwallet.MyMPCApp")
+
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
