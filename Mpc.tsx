@@ -5,7 +5,7 @@ import {
 } from "@pier-wallet/mpc-lib/dist/package/bitcoin";
 import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
 import React, { useEffect, useState } from "react";
-import { Button, ScrollView, Text } from "react-native";
+import { Button, Platform, ScrollView, Text } from "react-native";
 
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { ethers } from "ethers";
@@ -101,7 +101,7 @@ export default function Mpc() {
 
   const restoreWalletFromCloudOrGenerateKeyShare = async () => {
     try {
-      if (!signInWithGoogle.signedIn) {
+      if (Platform.OS === "android" && !signInWithGoogle.signedIn) {
         console.log("not signed in to google");
         return undefined;
       }
@@ -206,22 +206,30 @@ export default function Mpc() {
 
   if (isLoading) return <Text>Loading...</Text>;
 
-  if (!signInWithGoogle.signedIn) {
+  if (Platform.OS === "android" && !signInWithGoogle.signedIn) {
     return (
-      <Button
-        title="log in to google"
-        onPress={async () => await signInWithGoogle.signIn()}
-      />
+      <>
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
+          <Button
+            title="log in to google"
+            onPress={async () => await signInWithGoogle.signIn()}
+          />
+        </ScrollView>
+      </>
     );
   }
 
   if (!keyShare) {
     return (
-      <Button
-        title="Restore from Cloud Storage or Generate Key Share"
-        onPress={restoreWalletFromCloudOrGenerateKeyShare}
-        disabled={isLoading}
-      />
+      <>
+        <ScrollView contentInsetAdjustmentBehavior="automatic">
+          <Button
+            title="Restore from Cloud Storage or Generate Key Share"
+            onPress={restoreWalletFromCloudOrGenerateKeyShare}
+            disabled={isLoading}
+          />
+        </ScrollView>
+      </>
     );
   }
 
