@@ -46,6 +46,7 @@ export default function Mpc() {
       });
 
       // restore main key share from secure local storage
+      // TODO: Catch this "properly"
       const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
 
       if (!mainKeyShare) {
@@ -110,7 +111,7 @@ export default function Mpc() {
       const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
 
       if (!backupKeyShare) {
-        console.log("no key share found in cloud storage");
+        console.log("no key share found in cloud storage...genearting new");
         return generateKeyShare();
       }
       setRestored(true);
@@ -224,7 +225,7 @@ export default function Mpc() {
       <>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Button
-            title="Restore from Cloud Storage or Generate Key Share"
+            title="Initialize (Restore from Cloud Storage or Generate Key Share)"
             onPress={restoreWalletFromCloudOrGenerateKeyShare}
             disabled={isLoading}
           />
