@@ -11,7 +11,7 @@ import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { ethers } from "ethers";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
-import { CloudStorage } from "react-native-cloud-storage";
+import { CloudStorage } from "@pier-wallet/react-native-cloud-storage";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
@@ -45,16 +45,6 @@ export default function Mpc() {
   const [isCloudStorageAvailable, setIsCloudStorageAvailable] = useState<
     boolean | null
   >(null);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const contents = await CloudStorage.readdir("/");
-  //     console.log(
-  //       "🚀 ~ file: Mpc.tsx:121 ~ restoreWalletFromCloud ~ contents:",
-  //       contents,
-  //     );
-  //   })();
-  // }, []);
 
   useEffect(() => {
     const checkCloudStorage = async () => {
@@ -99,7 +89,6 @@ export default function Mpc() {
         // no local key share BUT cloud storage is available so we can try to restore from there
         await restoreWalletFromCloud();
         setIsLoading(false);
-        setInitiliazed(true);
         return undefined;
       }
 
@@ -134,11 +123,10 @@ export default function Mpc() {
       console.log("restoring key share from cloud storage...");
 
       const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
-
       if (!backupKeyShare) {
-        console.log("no key share found in cloud storage");
         return undefined;
       }
+      setInitiliazed(true);
       setRestored(true);
       setKeyShare(backupKeyShare);
 
@@ -229,7 +217,7 @@ export default function Mpc() {
 
   if (isLoading) return <Text>Loading...</Text>;
 
-  if (!initialized)
+  if (!initialized || !isCloudStorageAvailable)
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <Text>Initializing...</Text>
@@ -243,11 +231,6 @@ export default function Mpc() {
           <Button
             title="Generate key share"
             onPress={generateKeyShare}
-            disabled={isLoading}
-          />
-          <Button
-            title="Restore"
-            onPress={restoreWalletFromCloud}
             disabled={isLoading}
           />
         </ScrollView>
