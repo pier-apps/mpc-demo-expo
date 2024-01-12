@@ -62,7 +62,7 @@ export default function Mpc() {
       }
     };
     checkCloudStorage();
-  }, []);
+  }, [initialized]);
 
   useEffect(() => {
     (async () => {
