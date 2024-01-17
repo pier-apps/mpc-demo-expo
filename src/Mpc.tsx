@@ -9,9 +9,9 @@ import { Button, Platform, ScrollView, Text } from "react-native";
 
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { ethers } from "ethers";
+import { CloudStorage } from "react-native-cloud-storage";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
-import { CloudStorage } from "@pier-wallet/react-native-cloud-storage";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
@@ -75,27 +75,33 @@ export default function Mpc() {
         password: "123456",
       });
 
-      // restore main key share from secure local storage
-      // TODO: Catch this "properly"
-      const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
-
-      if (!mainKeyShare && !isCloudStorageAvailable) {
-        // no local key share BUT cloud storage is not available
+      const keyShareCount = await pierMpc.keySharesCount();
+      if (keyShareCount === 0) {
+        // no key shares available - we need to generate new ones
         setIsLoading(false);
         setInitiliazed(true);
-        return undefined;
+        return;
       }
-      if (!mainKeyShare) {
+
+      const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
+      if (mainKeyShare) {
+        // happy life - we have a local key share
+        setKeyShare(mainKeyShare);
+        setIsLoading(false);
+        setInitiliazed(true);
+        return;
+      }
+      if (isCloudStorageAvailable) {
         // no local key share BUT cloud storage is available so we can try to restore from there
         await restoreWalletFromCloud();
         setIsLoading(false);
-        return undefined;
+        setInitiliazed(true);
+        return;
       }
-
-      // happy life - we have a local key share
-      setKeyShare(mainKeyShare);
+      // no local key share AND no cloud storage available -- complete shitshow
       setIsLoading(false);
       setInitiliazed(true);
+      return;
     })();
   }, [pierMpc, isCloudStorageAvailable]);
 
@@ -120,8 +126,6 @@ export default function Mpc() {
 
   const restoreWalletFromCloud = async () => {
     try {
-      console.log("restoring key share from cloud storage...");
-
       const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
       if (!backupKeyShare) {
         return undefined;

@@ -358,7 +358,7 @@ PODS:
   - React-jsinspector (0.72.6)
   - React-logger (0.72.6):
     - glog
-  - react-native-cloud-storage (1.2.0):
+  - react-native-cloud-storage (1.2.4):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-netinfo (9.3.10):
@@ -551,7 +551,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
-  - "react-native-cloud-storage (from `../node_modules/@pier-wallet/react-native-cloud-storage`)"
+  - react-native-cloud-storage (from `../node_modules/react-native-cloud-storage`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-quick-crypto (from `../node_modules/react-native-quick-crypto`)
@@ -653,7 +653,7 @@ EXTERNAL SOURCES:
   React-logger:
     :path: "../node_modules/react-native/ReactCommon/logger"
   react-native-cloud-storage:
-    :path: "../node_modules/@pier-wallet/react-native-cloud-storage"
+    :path: "../node_modules/react-native-cloud-storage"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-quick-base64:
@@ -742,7 +742,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 3bf18ff7cb03cd8dfdce08fbbc0d15058c1d71ae
   React-jsinspector: 194e32c6aab382d88713ad3dd0025c5f5c4ee072
   React-logger: cebf22b6cf43434e471dc561e5911b40ac01d289
-  react-native-cloud-storage: 8ca843b9cfc9129f9583bc4fc62c9e02b4d04496
+  react-native-cloud-storage: 9e2b9279b16ecc2bcba98774c808d2a960c402c2
   react-native-netinfo: ccbe1085dffd16592791d550189772e13bf479e2
   react-native-quick-base64: 777057ea4286f806b00259ede65dc79c7c706320
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187

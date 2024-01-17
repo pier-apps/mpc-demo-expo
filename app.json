@@ -28,7 +28,7 @@
           }
         }
       ],
-      "@pier-wallet/react-native-cloud-storage"
+      "react-native-cloud-storage"
     ],
     "splash": {
       "image": "./assets/splash.png",

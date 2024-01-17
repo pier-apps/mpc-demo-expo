@@ -2037,14 +2037,13 @@
   resolved "https://registry.npmjs.org/@pier-wallet/mpc-ecdsa-wasm/-/mpc-ecdsa-wasm-0.2.2.tgz"
   integrity sha512-kjcBMfjpJvWx2uzh9LdVlxFTj4NMAA8dgdIz1DrxrkudJt+Yx2Ish+4+MpLg0Hc300cvpTROdpQVy9bS5j2Y1g==
 
-"@pier-wallet/mpc-lib@^0.9.0-stores.2":
-  version "0.9.0-stores.2"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.9.0-stores.2.tgz#f5a0886626d980b2593a54fc00b06d112aa0c9b9"
-  integrity sha512-2wHVlNonlsQ8Z0ih5nHisGIb/Nh1BFnpWlURdnNkPb+moHre/jqFVotMsUiQHiIUiQmiGCuteQf3dWBPXn8kQQ==
+"@pier-wallet/mpc-lib@^0.10.4-stores.0":
+  version "0.10.4-stores.0"
+  resolved "https://registry.yarnpkg.com/@pier-wallet/mpc-lib/-/mpc-lib-0.10.4-stores.0.tgz#5b0db152aa0620dff145406907437550d0bdb764"
+  integrity sha512-yJEdPKSLLJVHnvZbYFsucDUSv9ci56ez7QkIQnIGUszV0XcRhYPraGyXJ7DJni9ao2e2kvqmENd6Ely19KKUfw==
   dependencies:
     "@ethersproject/shims" "^5.7.0"
     "@pier-wallet/mpc-ecdsa-wasm" "0.2.2"
-    "@pier-wallet/react-native-cloud-storage" "^1.2.0"
     "@react-native-google-signin/google-signin" "^11.0.0"
     "@supabase/supabase-js" "^2.0.0"
     "@trpc/client" "^10.37.1"
@@ -2060,20 +2059,15 @@
     lodash "^4.17.21"
     lru_map "^0.4.1"
     ms "^2.1.3"
+    react-native-cloud-storage "^1.2.4"
     react-native-get-random-values "^1.9.0"
     react-native-url-polyfill "^2.0.0"
     react-native-webview "13.2.2"
+    rn-secure-storage "^3.0.0"
     superjson "^2.2.0"
     ts-essentials "^9.3.2"
     url "^0.11.3"
     zod "^3.22.4"
-
-"@pier-wallet/react-native-cloud-storage@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@pier-wallet/react-native-cloud-storage/-/react-native-cloud-storage-1.2.0.tgz#886ae1006a64d505cc438085fa5d23f56f4666b0"
-  integrity sha512-HR/PlahzMGpHT2HdfcZgCiWG9hnKZJKk7HV5rCOZ8awAEljRR79O5RNAA9nTAi1hTDdaJbb7lQcVy/2BzIeK7Q==
-  dependencies:
-    react-native-google-drive-api-wrapper-js "^1.2.3"
 
 "@pkgjs/parseargs@^0.11.0":
   version "0.11.0"
@@ -6799,6 +6793,11 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+react-native-cloud-storage@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/react-native-cloud-storage/-/react-native-cloud-storage-1.2.4.tgz#3e8b7304842d758f0f3805af8e26b1f8c415a3c0"
+  integrity sha512-Pz+GbKCbiCDIr3P0dElAUiwQ4IsjFGYvV+38CdHyszwjtiz5J6/YZhqLDqTh5zCAASiBiurG20wYPMRdpx0deA==
+
 react-native-css-interop@0.0.21:
   version "0.0.21"
   resolved "https://registry.npmjs.org/react-native-css-interop/-/react-native-css-interop-0.0.21.tgz"
@@ -6816,15 +6815,6 @@ react-native-get-random-values@^1.9.0:
   integrity sha512-+29IR2oxzxNVeaRwCqGZ9ABadzMI8SLTBidrIDXPOkKnm5+kEmLt34QKM4JV+d2usPErvKyS85le0OmGTHnyWQ==
   dependencies:
     fast-base64-decode "^1.0.0"
-
-react-native-google-drive-api-wrapper-js@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.npmjs.org/react-native-google-drive-api-wrapper-js/-/react-native-google-drive-api-wrapper-js-1.2.3.tgz"
-  integrity sha512-Ptnd91y1WvVj5JAyuFS2dsTZDgNtUboRPRKlfJ5Juxtm258pMNCe4PD6/Hil0BXcsFaga4dj7Xvu0K2xDOAALw==
-  dependencies:
-    base64-js "^1.5.1"
-    simple-common-utils "^2.3.0"
-    utf8 "^3.0.0"
 
 react-native-quick-base64@^2.0.5:
   version "2.0.7"
@@ -7161,6 +7151,11 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
+rn-secure-storage@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/rn-secure-storage/-/rn-secure-storage-3.0.0.tgz#6041d8eef5eeb14d008a814bc32d339357b739e8"
+  integrity sha512-rq3n4dmACDVkiX/rkC8DcP/QPu4rx2N5SWE9YnuBpY8UqF7qu8Oo4QcOEy0WLEG2B2pyHF0PfVk4XuTMth5PDA==
+
 run-parallel@^1.1.9:
   version "1.2.0"
   resolved "https://registry.npmjs.org/run-parallel/-/run-parallel-1.2.0.tgz"
@@ -7362,11 +7357,6 @@ signal-exit@^4.0.1:
   version "4.1.0"
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
-
-simple-common-utils@^2.3.0:
-  version "2.6.0"
-  resolved "https://registry.npmjs.org/simple-common-utils/-/simple-common-utils-2.6.0.tgz"
-  integrity sha512-K0gtyfMQ1+iDQvZKgdY2L+pbaG0MHp1ke6ho7IL6UKR8f59st+QJgw27FADF+3Hut19C3WUb7IhgENdY/OJG8w==
 
 simple-plist@^1.1.0:
   version "1.3.1"
@@ -8039,11 +8029,6 @@ utf-8-validate@^5.0.2:
   integrity sha512-Z6czzLq4u8fPOyx7TU6X3dvUZVvoJmxSQ+IcrlmagKhilxlhZgxPK6C5Jqbkw1IDUmFTM+cz9QDnnLTwDz/2gQ==
   dependencies:
     node-gyp-build "^4.3.0"
-
-utf8@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npmjs.org/utf8/-/utf8-3.0.0.tgz"
-  integrity sha512-E8VjFIQ/TyQgp+TZfS6l8yp/xWppSAHzidGiRrqe4bK4XP9pTRyKFgGJpO3SN7zdX4DeomTrwaseCHovfpFcqQ==
 
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
