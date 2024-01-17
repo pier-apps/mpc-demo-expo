@@ -11,6 +11,9 @@
         "expo-build-properties",
         {
           "android": {
+            "compileSdkVersion": 33,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "34.0.0",
             "packagingOptions": {
               "pickFirst": [
                 "lib/x86/libcrypto.so",
@@ -19,10 +22,13 @@
                 "lib/arm64-v8a/libcrypto.so"
               ]
             }
+          },
+          "ios": {
+            "deploymentTarget": "17.0"
           }
         }
       ],
-      ["react-native-cloud-storage"]
+      "react-native-cloud-storage"
     ],
     "splash": {
       "image": "./assets/splash.png",
@@ -34,7 +40,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.andras.pierwallet.MyMPCApp",
       "infoPlist": {
-        "RCTAsyncStorageExcludeFromBackup": false
+        "RCTAsyncStorageExcludeFromBackup": false,
+        "NSFaceIDUsageDescription": "We use FaceID to authenticate you to the app"
       },
       "config": {
         "usesNonExemptEncryption": false
