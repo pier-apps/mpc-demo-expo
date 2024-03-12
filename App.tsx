@@ -1,11 +1,17 @@
-import { PierMpcProvider } from "@pier-wallet/mpc-lib/dist/package/react-native";
-import React, { useEffect, useState } from "react";
+import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import NetInfo, { NetInfoState } from "@react-native-community/netinfo";
-import Mpc from "./src/Mpc";
-import { ScrollView, Text } from "react-native";
-import "./global.css";
+import { useEffect, useState } from "react";
+import { ScrollView, Text, useColorScheme } from "react-native";
+import { MD3DarkTheme, MD3LightTheme } from "react-native-paper";
 
 export default function App() {
+  const isDarkMode = useColorScheme() === "dark";
+  const { theme } = useMaterial3Theme();
+
+  const paperTheme = isDarkMode
+    ? { ...MD3DarkTheme, colors: theme.dark }
+    : { ...MD3LightTheme, colors: theme.light };
+
   const [isConnectedToInternet, setIsConnectedToInternet] = useState(true);
 
   const onNetworkStateChange = (newState: NetInfoState) => {
@@ -28,17 +34,19 @@ export default function App() {
     NetInfo.addEventListener(onNetworkStateChange);
   }, []);
 
-  if (!isConnectedToInternet) {
-    return (
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Text>Not connected to the internet</Text>
-      </ScrollView>
-    );
-  }
-
+  // if (!isConnectedToInternet) {
   return (
-    <PierMpcProvider>
-      <Mpc />
-    </PierMpcProvider>
+    <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <Text>Not connected to the internet</Text>
+    </ScrollView>
   );
+  // }
+
+  // return (
+  //   <PaperProvider theme={paperTheme}>
+  //     <PierMpcProvider>
+  //       <Mpc />
+  //     </PierMpcProvider>
+  //   </PaperProvider>
+  // );
 }
