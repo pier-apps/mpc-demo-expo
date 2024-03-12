@@ -1,7 +1,8 @@
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import React from "react";
 import { Appbar, Button } from "react-native-paper";
-import { useGenerateKeyShare, useMakeSureWeHaveAccessToCloud } from "./pierMpc";
+import { useGenerateKeyShare } from "./pierMpc";
 
 const GOOGLE_WEB_CLIENT_ID =
   "571078858320-6p05u91onche6so06f62hehkugtip6np.apps.googleusercontent.com";
@@ -10,8 +11,11 @@ const GOOGLE_IOS_CLIENT_ID =
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
-  const { checkGoogleCloud } = useMakeSureWeHaveAccessToCloud();
+  // const { checkGoogleCloud } = useMakeSureWeHaveAccessToCloud();
   const { generateKeyShare } = useGenerateKeyShare();
+  const checkGoogleCloud = async () => {
+    throw new Error("Not implemented");
+  };
 
   GoogleSignin.configure({
     webClientId: GOOGLE_WEB_CLIENT_ID, // client ID of type WEB for your server. Required to get the `idToken` on the user object, and for offline access.

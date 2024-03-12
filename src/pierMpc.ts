@@ -18,7 +18,6 @@ import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
   process.env.ETHEREUM_PROVIDER_URL || "https://rpc.sepolia.org",
 );
-const pierMpc = usePierMpc();
 
 export const ETH_DECIMALS = 18;
 export const BTC_DECIMALS = 8;
@@ -34,6 +33,7 @@ export type PierWallet = {
 
 export const useSignInToPierMpc = () => {
   const { jwt } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
   if (typeof jwt !== "string") {
     return;
   }
@@ -69,6 +69,7 @@ export const useMakeSureWeHaveAccessToCloud = () => {
 
 export const useGenerateKeyShare = () => {
   const { userId } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
   const [isGenerating, setIsGenerating] = useState(false);
 
   const generateKeyShare = async () => {
@@ -93,6 +94,7 @@ export const useGenerateKeyShare = () => {
 
 export const useRestoreKeyShareFromCloudStorage = () => {
   const { userId } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
   const [recoveryStatus, setRecoveryStatus] =
     useState<ReactNativeKeyShareSyncStatus>("sync-start");
 
@@ -144,6 +146,7 @@ export const useRestoreKeyShareFromCloudStorage = () => {
 
 export const useGetKeyShareCount = () => {
   const { userId } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
 
   return useQuery({
     queryKey: ["pierBtcVault", userId],
@@ -155,6 +158,7 @@ export const useGetKeyShareCount = () => {
 
 export const useGetKeySharesPublicKeys = () => {
   const { userId } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
 
   return useQuery({
     queryKey: ["pierKeySharesPublicKeys", userId],
@@ -170,6 +174,7 @@ export const useGetLocalKeyShare = ({
   publicKey: string | undefined;
 }) => {
   const { userId } = useGetSignTokenAndUserId();
+  const pierMpc = usePierMpc();
 
   return useQuery({
     queryKey: ["pierLocalKeyShare", userId, publicKey],
@@ -216,6 +221,7 @@ export const useGetBackupFromCloudKeyShare = ({
 };
 
 export const useWallet = (keyShare: KeyShare | null | undefined) => {
+  const pierMpc = usePierMpc();
   const res = useQuery({
     queryKey: ["wallets", keyShare?.publicKey, keyShare?.partyIndex],
     queryFn: async () => {
@@ -374,9 +380,10 @@ class PierMpcWallet {
     return { btcTransferTx, ethTransferTx };
   }
 }
+
 export const pierMpcWallet = new PierMpcWallet();
 
-// INTERNALS
+// // INTERNALS
 const getPierKeyShareName = (userId: string, publicKey: string) =>
   `keyshare-${userId}-${publicKey}`;
 
