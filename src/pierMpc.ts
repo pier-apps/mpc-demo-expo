@@ -174,7 +174,6 @@ export const useGetLocalKeyShare = ({
   publicKey: string | undefined;
 }) => {
   const { userId } = useGetSignTokenAndUserId();
-  const pierMpc = usePierMpc();
 
   return useQuery({
     queryKey: ["pierLocalKeyShare", userId, publicKey],
