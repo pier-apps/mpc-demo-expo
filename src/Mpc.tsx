@@ -4,177 +4,139 @@ import {
   PierMpcBitcoinWalletNetwork,
 } from "@pier-wallet/mpc-lib/dist/package/bitcoin";
 import { PierMpcEthereumWallet } from "@pier-wallet/mpc-lib/dist/package/ethers-v5";
-import React, { useEffect, useState } from "react";
-import { Button, Platform, ScrollView, Text } from "react-native";
-
 import { usePierMpc } from "@pier-wallet/mpc-lib/dist/package/react-native";
 import { ethers } from "ethers";
-import { CloudStorage } from "react-native-cloud-storage";
+import { useEffect, useState } from "react";
+import { Button, SafeAreaView, Text, View } from "react-native";
+import { useGetSignTokenAndUserId } from "./auth";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
-
-// REMARK: Use should use your own ethers provider - this is just for demo purposes
-const ethereumProvider = new ethers.providers.JsonRpcProvider(
-  "https://rpc.sepolia.org",
-);
-const GOOGLE_WEB_CLIENT_ID =
-  "571078858320-6p05u91onche6so06f62hehkugtip6np.apps.googleusercontent.com";
-const userId = "123";
-
-// Scenario 1: New user / create key shares & store backup in cloud
-
-// Scenario 2: Existing user / restore key shares from local secure storage
-// Scenario 3: Existing user / restore key shares from cloud storage
-
-// TODO: Secnario 1b: New user / create key shares & store backup with whatever way the user wants
-// TODO: Scenario 3b: Existing user / restore key shares from whatever way the user wants
+import {
+  useMakeSureWeHaveAccessToCloud,
+  useRestoreKeyShareFromCloudStorage,
+} from "./pierMpc-mobile";
+import { ethereumProvider, getPierKeyShareName } from "./pierMpc-queries";
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
+  const { checkIsCloudAvailable } = useMakeSureWeHaveAccessToCloud();
+  const { restoreKeyShareFromCloudStorage } =
+    useRestoreKeyShareFromCloudStorage();
+  const { userId } = useGetSignTokenAndUserId();
 
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
   const [ethWallet, setEthWallet] = useState<PierMpcEthereumWallet | null>(
     null,
   );
   const [btcWallet, setBtcWallet] = useState<PierMpcBitcoinWallet | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCloudAvailable, setCloudAvailable] = useState(false);
 
-  const [initialized, setInitiliazed] = useState(false);
-  const [restored, setRestored] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [isCloudStorageAvailable, setIsCloudStorageAvailable] = useState<
-    boolean | null
-  >(null);
-
-  useEffect(() => {
-    const checkCloudStorage = async () => {
-      const isAvailable = await CloudStorage.isCloudAvailable();
-      setIsCloudStorageAvailable(isAvailable);
-      if (
-        !isAvailable &&
-        Platform.OS === "android" &&
-        initialized &&
-        !keyShare
-      ) {
-        await keyShareCloudStorage.signInWithGoogle(GOOGLE_WEB_CLIENT_ID);
-        const isAvailable = await CloudStorage.isCloudAvailable();
-        setIsCloudStorageAvailable(isAvailable);
-      }
-    };
-    checkCloudStorage();
-  }, [initialized]);
-
+  // Check access to cloud
   useEffect(() => {
     (async () => {
-      setIsLoading(true);
-      setKeyShare(null);
+      const cloudAvailable = await checkIsCloudAvailable();
 
-      // log in to MPC server
-      await pierMpc.auth.signInWithPassword({
-        email: "mpc-lib-test@example.com",
-        password: "123456",
-      });
-
-      const keyShareCount = await pierMpc.keySharesCount();
-      if (keyShareCount === 0) {
-        // no key shares available - we need to generate new ones
-        setIsLoading(false);
-        setInitiliazed(true);
-        return;
+      if (cloudAvailable) {
+        setCloudAvailable(true);
       }
-
-      const mainKeyShare = await keyShareSecureLocalStorage.getKeyShare(userId);
-      if (mainKeyShare) {
-        // happy life - we have a local key share
-        setKeyShare(mainKeyShare);
-        setIsLoading(false);
-        setInitiliazed(true);
-        return;
-      }
-      if (isCloudStorageAvailable) {
-        // no local key share BUT cloud storage is available so we can try to restore from there
-        await restoreWalletFromCloud();
-        setIsLoading(false);
-        setInitiliazed(true);
-        return;
-      }
-      // no local key share AND no cloud storage available -- complete shitshow
-      setIsLoading(false);
-      setInitiliazed(true);
-      return;
     })();
-  }, [pierMpc, isCloudStorageAvailable]);
+  }, [checkIsCloudAvailable]);
 
-  const generateKeyShare = async () => {
-    setIsLoading(true);
-    try {
-      const [mainKeyShare, backupKeyShare] =
-        await pierMpc.generateKeyShare2Of3();
-
-      // Store main keyshare in secure storage (on device)
-      await keyShareSecureLocalStorage.saveKeyShare(userId, mainKeyShare);
-
-      // Store backup keyshare in cloud storage
-      await keyShareCloudStorage.saveKeyShare(userId, backupKeyShare);
-
-      setKeyShare(mainKeyShare);
-    } catch (e) {
-      console.error(e);
-    }
-    setIsLoading(false);
-  };
-
-  const restoreWalletFromCloud = async () => {
-    try {
-      const backupKeyShare = await keyShareCloudStorage.getKeyShare(userId);
-      if (!backupKeyShare) {
-        return undefined;
-      }
-      setInitiliazed(true);
-      setRestored(true);
-      setKeyShare(backupKeyShare);
-
-      // TODO: Allow user to create new account & transfer everything to new account, both chains
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
+  // Establish connection with pier's MPC server and "instantiate" wallets
   useEffect(() => {
-    if (!keyShare) {
-      setEthWallet(null);
-      setBtcWallet(null);
-      return;
-    }
-
     (async () => {
+      if (!isLoggedIn || !keyShare) {
+        return;
+      }
+
       const signConnection = await pierMpc.establishConnection(
         SessionKind.SIGN,
         keyShare.partiesParameters,
       );
-
       const ethWallet = new PierMpcEthereumWallet(
         keyShare,
         signConnection,
         pierMpc,
         ethereumProvider,
       );
-      setEthWallet(ethWallet);
-
       const btcWallet = new PierMpcBitcoinWallet(
         keyShare,
         PierMpcBitcoinWalletNetwork.Testnet,
         signConnection,
         pierMpc,
       );
+
+      setEthWallet(ethWallet);
       setBtcWallet(btcWallet);
     })();
-  }, [keyShare, pierMpc]);
+  }, [keyShare, isLoggedIn, pierMpc, ethereumProvider]);
 
+  // Load local keyshare from secure storage
+  useEffect(() => {
+    (async () => {
+      if (!isLoggedIn) {
+        return;
+      }
+      const lastPublicKey = (await pierMpc.keySharesPublicKeys()).at(-1);
+
+      if (!lastPublicKey) {
+        return;
+      }
+      const localKeyShare = await keyShareSecureLocalStorage.getKeyShare(
+        getPierKeyShareName(userId, lastPublicKey),
+      );
+
+      if (!localKeyShare) {
+        return;
+      }
+
+      setKeyShare(localKeyShare);
+    })();
+  }, [isLoggedIn, pierMpc, userId]);
+
+  const signInToPier = async () => {
+    try {
+      await pierMpc.auth.signInWithPassword({
+        email: "mpc-lib-test@example.com",
+        password: "123456",
+      });
+      setIsLoggedIn(true);
+    } catch (e) {
+      console.error(e);
+    }
+
+    console.log("signed in as test user");
+  };
+
+  const generateAndSaveKeyShare = async () => {
+    const cloudAvailable = await checkIsCloudAvailable();
+    if (!cloudAvailable) {
+      throw new Error("Cloud is not available");
+    }
+    try {
+      const [mainKeyShare, backupKeyShare] =
+        await pierMpc.generateKeyShare2Of3();
+
+      // Define a keysharename to ensure some kind of versioning for future wallets
+      const keyShareName = getPierKeyShareName(userId, mainKeyShare.publicKey);
+
+      // Store main keyshare in secure storage (on device)
+      await keyShareSecureLocalStorage.saveKeyShare(keyShareName, mainKeyShare);
+
+      // Store backup keyshare in cloud storage
+      await keyShareCloudStorage.saveKeyShare(keyShareName, backupKeyShare);
+
+      setKeyShare(mainKeyShare);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // THIS IS JUST FOR DEMO
   const sendEthereumTransaction = async () => {
     if (!ethWallet) return;
 
-    setIsLoading(true);
     try {
       // send 1/10 of the balance to the zero address
       const receiver = ethers.constants.AddressZero;
@@ -190,13 +152,11 @@ export default function Mpc() {
     } catch (e) {
       console.error(e);
     } finally {
-      setIsLoading(false);
     }
   };
   const sendBitcoinTransaction = async () => {
     if (!btcWallet) return;
 
-    setIsLoading(true);
     try {
       const receiver = "tb1qw2c3lxufxqe2x9s4rdzh65tpf4d7fssjgh8nv6"; // testnet faucet
       const amountToSend = 800n; // 0.00000800 BTC = 800 satoshi
@@ -214,105 +174,84 @@ export default function Mpc() {
       console.log("tx", tx.hash);
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsLoading(false);
     }
   };
-
-  if (isLoading) return <Text>Loading...</Text>;
-
-  if (!initialized || !isCloudStorageAvailable)
-    return (
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <Text>Initializing...</Text>
-      </ScrollView>
+  const restoreKeyShareFromCloud = async () => {
+    const lastPublicKey = (await pierMpc.keySharesPublicKeys()).at(-1);
+    if (!lastPublicKey) {
+      throw new Error("publicKey is undefined");
+    }
+    const backupKeyShare = await restoreKeyShareFromCloudStorage(
+      getPierKeyShareName(userId, lastPublicKey),
     );
-
-  if (initialized && !keyShare)
-    return (
-      <>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          <Button
-            title="Generate key share"
-            onPress={generateKeyShare}
-            disabled={isLoading}
-          />
-        </ScrollView>
-      </>
+    setKeyShare(backupKeyShare);
+  };
+  const deleteLocalKeyShare = async () => {
+    if (!keyShare?.publicKey) return;
+    await keyShareSecureLocalStorage.deleteKeyShare(
+      getPierKeyShareName(userId, keyShare.publicKey),
+      keyShare.publicKey,
     );
+    setKeyShare(null);
+  };
+  const deleteCloudKeyShares = async () => {
+    if (!keyShare?.publicKey) return;
+    await keyShareCloudStorage.deleteKeyShare(
+      getPierKeyShareName(userId, keyShare.publicKey),
+      keyShare.publicKey,
+    );
+    setKeyShare(null);
+  };
 
-  if (initialized && keyShare)
-    return (
-      <>
-        <ScrollView contentInsetAdjustmentBehavior="automatic">
-          {restored && (
-            <Text selectable>
-              Key share restored from cloud storage. Please create a new account
-              and transfer your funds to the new account.
-            </Text>
-          )}
-
-          {ethWallet && (
-            <Text selectable>ETH Address: {ethWallet.address}</Text>
-          )}
-          {btcWallet && (
-            <Text selectable>BTC Address: {btcWallet.address}</Text>
-          )}
-
-          {ethWallet && !restored && (
+  return (
+    <>
+      <SafeAreaView>
+        {!isLoggedIn && <Button title="Sign in" onPress={signInToPier} />}
+        {!isCloudAvailable && (
+          <Text>
+            Cloud is not available - sign in to your Apple or Google Account
+          </Text>
+        )}
+        {isLoggedIn && isCloudAvailable && (
+          <>
             <Button
-              title="Send Ethereum"
+              title="Generate key share"
+              onPress={generateAndSaveKeyShare}
+              disabled={!isLoggedIn || !!keyShare}
+            />
+            {/* Card displaying ETH Address and BTC address */}
+            <View>
+              <Text>ETH Address: {ethWallet?.address}</Text>
+              <Text>BTC Address: {btcWallet?.address}</Text>
+            </View>
+            <Button
+              title="Send Ethereum transaction"
               onPress={sendEthereumTransaction}
-              disabled={isLoading}
+              disabled={!ethWallet}
             />
-          )}
-          {btcWallet && !restored && (
             <Button
-              title="Send Bitcoin"
+              title="Send Bitcoin transaction"
               onPress={sendBitcoinTransaction}
-              disabled={isLoading}
+              disabled={!btcWallet}
             />
-          )}
-          <Button
-            title="Delete wallet from phone and cloud storage"
-            disabled={!keyShare || isLoading}
-            onPress={async () => {
-              if (!keyShare) return;
-              await keyShareCloudStorage
-                .deleteKeyShare(userId, keyShare.publicKey)
-                .catch((err) => {
-                  console.error(
-                    "Failed to delete key share from cloud storage",
-                    err,
-                  );
-                });
-              await keyShareSecureLocalStorage
-                .deleteKeyShare(userId, keyShare.publicKey)
-                .catch((err) => {
-                  console.error(
-                    "Failed to delete key share from secure local storage",
-                    err,
-                  );
-                });
-              setKeyShare(null);
-            }}
-          />
-          <Button
-            title="Delete wallet from phone storage"
-            disabled={!keyShare || isLoading}
-            onPress={async () => {
-              if (!keyShare) return;
-              await keyShareSecureLocalStorage
-                .deleteKeyShare(userId, keyShare.publicKey)
-                .catch((err) => {
-                  console.error(
-                    "Failed to delete key share from secure local storage",
-                    err,
-                  );
-                });
-            }}
-          />
-        </ScrollView>
-      </>
-    );
+            <Text>Recovery stuff</Text>
+            <Button
+              title="Delete local key share"
+              onPress={deleteLocalKeyShare}
+              disabled={!keyShare}
+            />
+            <Button
+              title="Restore wallet from cloud"
+              onPress={restoreKeyShareFromCloud}
+            />
+            <Button
+              title="Delete cloud key shares"
+              onPress={deleteCloudKeyShares}
+              disabled={!keyShare}
+            />
+          </>
+        )}
+      </SafeAreaView>
+    </>
+  );
 }
