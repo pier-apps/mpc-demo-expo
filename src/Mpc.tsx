@@ -12,6 +12,7 @@ import { ethers } from "ethers";
 import { CloudStorage } from "react-native-cloud-storage";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
+import { useMakeSureWeHaveAccessToCloud } from "./pierMpc";
 
 // REMARK: Use should use your own ethers provider - this is just for demo purposes
 const ethereumProvider = new ethers.providers.JsonRpcProvider(
@@ -31,6 +32,7 @@ const userId = "123";
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
+  const { checkIcloud } = useMakeSureWeHaveAccessToCloud();
 
   const [keyShare, setKeyShare] = useState<KeyShare | null>(null);
   const [ethWallet, setEthWallet] = useState<PierMpcEthereumWallet | null>(
