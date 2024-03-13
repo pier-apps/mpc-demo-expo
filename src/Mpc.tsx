@@ -11,11 +11,15 @@ import { Button, SafeAreaView, Text, View } from "react-native";
 import { useGetSignTokenAndUserId } from "./auth";
 import { keyShareCloudStorage } from "./keyshare-cloudstorage";
 import { keyShareSecureLocalStorage } from "./keyshare-securelocalstorage";
-import { useRestoreKeyShareFromCloudStorage } from "./pierMpc-mobile";
+import {
+  useMakeSureWeHaveAccessToCloud,
+  useRestoreKeyShareFromCloudStorage,
+} from "./pierMpc-mobile";
 import { ethereumProvider, getPierKeyShareName } from "./pierMpc-queries";
 
 export default function Mpc() {
   const pierMpc = usePierMpc();
+  const { checkIsCloudAvailable } = useMakeSureWeHaveAccessToCloud();
   const { restoreKeyShareFromCloudStorage } =
     useRestoreKeyShareFromCloudStorage();
   const { userId } = useGetSignTokenAndUserId();
@@ -26,6 +30,18 @@ export default function Mpc() {
   );
   const [btcWallet, setBtcWallet] = useState<PierMpcBitcoinWallet | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isCloudAvailable, setCloudAvailable] = useState(false);
+
+  // Check access to cloud
+  useEffect(() => {
+    (async () => {
+      const cloudAvailable = await checkIsCloudAvailable();
+
+      if (cloudAvailable) {
+        setCloudAvailable(true);
+      }
+    })();
+  }, [checkIsCloudAvailable]);
 
   // Establish connection with pier's MPC server and "instantiate" wallets
   useEffect(() => {
@@ -94,6 +110,10 @@ export default function Mpc() {
   };
 
   const generateAndSaveKeyShare = async () => {
+    const cloudAvailable = await checkIsCloudAvailable();
+    if (!cloudAvailable) {
+      throw new Error("Cloud is not available");
+    }
     try {
       const [mainKeyShare, backupKeyShare] =
         await pierMpc.generateKeyShare2Of3();
@@ -187,7 +207,12 @@ export default function Mpc() {
     <>
       <SafeAreaView>
         {!isLoggedIn && <Button title="Sign in" onPress={signInToPier} />}
-        {isLoggedIn && (
+        {!isCloudAvailable && (
+          <Text>
+            Cloud is not available - sign in to your Apple or Google Account
+          </Text>
+        )}
+        {isLoggedIn && isCloudAvailable && (
           <>
             <Button
               title="Generate key share"
